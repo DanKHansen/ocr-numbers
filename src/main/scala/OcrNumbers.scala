@@ -1,2 +1,16 @@
 object OcrNumbers:
-   def convert(l: List[String]): String = ???
+   def convert(l: List[String]): String = {
+      val ocrs = Map(
+        List(" _ ", "| |", "|_|", "   ") -> "0",
+        List("   ", "  |", "  |", "   ") -> "1",
+        List(" _ ", " _|", "|_ ", "   ") -> "2",
+        List(" _ ", " _|", " _|", "   ") -> "3",
+        List("   ", "|_|", "  |", "   ") -> "4",
+        List(" _ ", "|_ ", " _|", "   ") -> "5",
+        List(" _ ", "|_ ", "|_|", "   ") -> "6",
+        List(" _ ", "  |", "  |", "   ") -> "7",
+        List(" _ ", "|_|", "|_|", "   ") -> "8",
+        List(" _ ", "|_|", " _|", "   ") -> "9"
+      )
+      ocrs.getOrElse(l,"?")
+   }
