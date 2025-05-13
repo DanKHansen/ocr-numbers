@@ -1,5 +1,3 @@
-import java.util.InvalidPropertiesFormatException
-
 object OcrNumbers:
 
    def convert(l: List[String]): String =
@@ -16,14 +14,13 @@ object OcrNumbers:
         List(" _ ", "|_|", " _|", "   ") -> "9"
       )
 
-      val lines = l.sliding(4, 4)
-      val numbers = lines.map(l =>
-         if l.size % 4 != 0 || l.forall(_.length % 3 != 0) then "?"
-         else
-            val tops = l.head.sliding(3, 3).toList
-            val upperMiddles = l(1).sliding(3, 3).toList
-            val lowerMiddles = l(2).sliding(3, 3).toList
-            val bottoms = l(3).sliding(3, 3).toList
-            val cubes = for i <- tops.indices yield tops(i) :: upperMiddles(i) :: lowerMiddles(i) :: bottoms(i) :: Nil
-            cubes.map(c => ocrs.getOrElse(c, "?")).mkString)
-      numbers.mkString(",")
+      l.sliding(4, 4)
+         .map { lines =>
+            if lines.size != 4 || lines.exists(_.length % 3 != 0) then "?"
+            else
+               val digits = for (i <- 0 until lines.head.length / 3) yield
+                  val cube = (0 until 4).map(j => lines(j).substring(i * 3, i * 3 + 3)).toList
+                  ocrs.getOrElse(cube, "?")
+               digits.mkString
+         }
+         .mkString(",")
